@@ -20651,6 +20651,7 @@ function useActiveCategoryScrollDetection(_ref) {
   var BodyRef = useBodyRef();
   React.useEffect(function () {
     var visibleCategories = new Map();
+    var intersectingCategories = new Map();
     var bodyRef = BodyRef.current;
     var observer = new IntersectionObserver(function (entries) {
       if (!bodyRef) {
@@ -20670,11 +20671,13 @@ function useActiveCategoryScrollDetection(_ref) {
           continue;
         }
         visibleCategories.set(_id, entry.intersectionRatio);
+        intersectingCategories.set(_id, entry.isIntersecting);
       }
       var ratios = Array.from(visibleCategories);
       var visibleCats = ratios.filter(function (_ref2) {
-        var ratio = _ref2[1];
-        return ratio > 0;
+        var id = _ref2[0],
+          ratio = _ref2[1];
+        return ratio > 0 || intersectingCategories.get(id);
       }).map(function (_ref3) {
         var id = _ref3[0];
         return id;
