@@ -22,6 +22,14 @@ export function useActiveCategoryScrollDetection({
           return;
         }
 
+        console.log('📥 Entries in this callback:',
+          entries.map(e => ({
+            id: categoryNameFromDom(e.target),
+            ratio: e.intersectionRatio,
+            isIntersecting: e.isIntersecting
+          }))
+        );
+
         for (const entry of entries) {
           const id = categoryNameFromDom(entry.target);
 
@@ -60,11 +68,17 @@ export function useActiveCategoryScrollDetection({
         threshold: [0, 1]
       }
     );
-    bodyRef?.querySelectorAll(asSelectors(ClassNames.category)).forEach(el => {
+    const elements = bodyRef?.querySelectorAll(asSelectors(ClassNames.category));
+    console.log('🎯 Setting up observer for categories:',
+      Array.from(elements || []).map(el => categoryNameFromDom(el))
+    );
+
+    elements?.forEach(el => {
       observer.observe(el);
     });
 
     return () => {
+      console.log('🧹 Disconnecting observer');
       observer.disconnect();
     };
   }, [BodyRef, setActiveCategory, setVisibleCategories]);

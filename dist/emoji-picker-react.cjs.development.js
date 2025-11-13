@@ -20656,6 +20656,13 @@ function useActiveCategoryScrollDetection(_ref) {
       if (!bodyRef) {
         return;
       }
+      console.log('📥 Entries in this callback:', entries.map(function (e) {
+        return {
+          id: categoryNameFromDom(e.target),
+          ratio: e.intersectionRatio,
+          isIntersecting: e.isIntersecting
+        };
+      }));
       for (var _iterator = _createForOfIteratorHelperLoose(entries), _step; !(_step = _iterator()).done;) {
         var entry = _step.value;
         var _id = categoryNameFromDom(entry.target);
@@ -20695,10 +20702,15 @@ function useActiveCategoryScrollDetection(_ref) {
       root: bodyRef,
       threshold: [0, 1]
     });
-    bodyRef == null ? void 0 : bodyRef.querySelectorAll(asSelectors(ClassNames.category)).forEach(function (el) {
+    var elements = bodyRef == null ? void 0 : bodyRef.querySelectorAll(asSelectors(ClassNames.category));
+    console.log('🎯 Setting up observer for categories:', Array.from(elements || []).map(function (el) {
+      return categoryNameFromDom(el);
+    }));
+    elements == null ? void 0 : elements.forEach(function (el) {
       observer.observe(el);
     });
     return function () {
+      console.log('🧹 Disconnecting observer');
       observer.disconnect();
     };
   }, [BodyRef, setActiveCategory, setVisibleCategories]);
