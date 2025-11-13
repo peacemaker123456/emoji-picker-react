@@ -50,11 +50,16 @@ export function useActiveCategoryScrollDetection({
         }
       },
       {
+        root: bodyRef,
         threshold: [0, 1]
       }
     );
     bodyRef?.querySelectorAll(asSelectors(ClassNames.category)).forEach(el => {
       observer.observe(el);
     });
+
+    return () => {
+      observer.disconnect();
+    };
   }, [BodyRef, setActiveCategory, setVisibleCategories]);
 }
