@@ -20664,15 +20664,21 @@ function useActiveCategoryScrollDetection(_ref) {
         visibleCategories.set(_id, entry.intersectionRatio);
       }
       var ratios = Array.from(visibleCategories);
-      setVisibleCategories(ratios.filter(function (_ref2) {
+      var visibleCats = ratios.filter(function (_ref2) {
         var ratio = _ref2[1];
         return ratio > 0;
       }).map(function (_ref3) {
         var id = _ref3[0];
         return id;
-      }));
+      });
+      console.log('🔍 Intersection update:', {
+        allRatios: Object.fromEntries(ratios),
+        visibleCategories: visibleCats,
+        entriesCount: entries.length
+      });
+      setVisibleCategories(visibleCats);
       var lastCategory = ratios[ratios.length - 1];
-      if (lastCategory[1] == 1) {
+      if (lastCategory && lastCategory[1] == 1) {
         return setActiveCategory(lastCategory[0]);
       }
       for (var _i = 0, _ratios = ratios; _i < _ratios.length; _i++) {

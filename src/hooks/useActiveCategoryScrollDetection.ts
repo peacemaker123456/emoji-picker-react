@@ -33,12 +33,18 @@ export function useActiveCategoryScrollDetection({
         }
 
         const ratios = Array.from(visibleCategories);
-        setVisibleCategories(
-          ratios.filter(([_, ratio]) => ratio > 0).map(([id]) => id)
-        );
+        const visibleCats = ratios.filter(([_, ratio]) => ratio > 0).map(([id]) => id);
+
+        console.log('🔍 Intersection update:', {
+          allRatios: Object.fromEntries(ratios),
+          visibleCategories: visibleCats,
+          entriesCount: entries.length
+        });
+
+        setVisibleCategories(visibleCats);
         const lastCategory = ratios[ratios.length - 1];
 
-        if (lastCategory[1] == 1) {
+        if (lastCategory && lastCategory[1] == 1) {
           return setActiveCategory(lastCategory[0]);
         }
 
